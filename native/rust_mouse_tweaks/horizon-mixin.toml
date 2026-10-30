@@ -1,0 +1,33 @@
+[mod]
+id = "rust_mouse_tweaks"
+version = "0.2.0"
+priority = 100
+
+[compatibility]
+horizon_revision = "e4472a7423da0740c881132d61e8e9b368bfef4c"
+
+[[module]]
+id = "runtime"
+file = "crates/horizon-client/src/game.rs"
+name = "rust_mouse_tweaks_runtime"
+source = "runtime.rs"
+
+[[module]]
+id = "core"
+file = "crates/horizon-client/src/game.rs"
+name = "rust_mouse_tweaks_core"
+source = "core.rs"
+
+[[injection]]
+id = "list"
+kind = "HEAD"
+target = "horizon_client::game::native_hooks::Game<'_>::native_mods"
+helper = "list.rs"
+bindings = [{"name" = "game", "ty" = "&mut crate::game::Game<'_>", "value" = "&mut *self"}, {"name" = "mods", "ty" = "&mut Vec<crate::game::native_hooks::NativeMod>", "value" = "mods"}]
+
+[[injection]]
+id = "dropin_enabled"
+kind = "HEAD"
+target = "horizon_client::game::native_hooks::Game<'_>::native_mouse_tweaks"
+helper = "dropin_enabled.rs"
+bindings = [{"name" = "game", "ty" = "&crate::game::Game<'_>", "value" = "&*self"}, {"name" = "enabled", "ty" = "&mut bool", "value" = "enabled"}]
